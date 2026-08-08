@@ -16,7 +16,7 @@ with no dependencies. Your list saves automatically in the browser
 
 ## Usage
 
-Open `dorm-packer.html` in any browser. That's it.
+Open `index.html` in any browser. That's it.
 
 ## Tech
 
