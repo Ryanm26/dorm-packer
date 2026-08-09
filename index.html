@@ -85,8 +85,8 @@
   .app{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 
   /* little Totoro companion — click to toggle light/dark */
-  .mascot{position:fixed;right:14px;bottom:8px;width:94px;z-index:6;
-    padding:0;border:0;background:none;cursor:pointer;transform-origin:bottom center;
+  .mascot{position:fixed;left:14px;top:12px;width:94px;z-index:6;
+    padding:0;border:0;background:none;cursor:pointer;transform-origin:top center;
     -webkit-tap-highlight-color:transparent;
     filter:drop-shadow(0 7px 11px rgba(30,45,90,.28));
     animation:bob 4.5s ease-in-out infinite}
@@ -95,7 +95,7 @@
   .mascot:active img{transform:scale(.95)}
   .mascot:focus-visible{outline:none;border-radius:16px;box-shadow:0 0 0 3px var(--ring)}
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
-  @media (max-width:600px){.mascot{width:62px;right:8px;bottom:6px}}
+  @media (max-width:600px){.mascot{width:62px;left:auto;top:auto;right:8px;bottom:6px;transform-origin:bottom center}}
   @media (prefers-reduced-motion:reduce){.mascot{animation:none;transform:rotate(-2deg)}}
 
   /* ambient layers */
@@ -158,8 +158,8 @@
     filter:drop-shadow(0 4px 10px rgba(20,60,90,.22))}
   .c-blue{left:-2vw;bottom:-52px;width:320px}
   .c-orange{left:-1vw;bottom:-30px;width:200px}
-  .c-seaweed{right:120px;bottom:-6px;width:350px;opacity:.85}
-  .c-red{right:130px;bottom:-22px;width:162px;opacity:.9}
+  .c-seaweed{right:calc(50vw - 682px);bottom:-6px;width:350px;opacity:.85}
+  .c-red{right:calc(50vw - 640px);bottom:-14px;width:152px;opacity:.92}
   @media (max-width:640px){.c-blue{width:210px;bottom:-34px}.c-orange{left:-2vw;width:150px}
     .c-seaweed{display:none}.c-red{width:120px;right:70px}}
   .bubble{position:absolute;bottom:-40px;border-radius:50%;opacity:0;
@@ -192,8 +192,8 @@
     96%,100%{opacity:0;transform:translate(12vw,48vh) rotate(158deg)}}
 
   /* night-switch fx: moon + zzz drifting off Totoro */
-  .nightfx{position:fixed;right:80px;bottom:96px;z-index:7;pointer-events:none}
-  @media (max-width:600px){.nightfx{right:60px;bottom:72px}}
+  .nightfx{position:fixed;left:74px;top:60px;z-index:7;pointer-events:none}
+  @media (max-width:600px){.nightfx{left:auto;top:auto;right:60px;bottom:72px}}
   .nightfx span{position:absolute;opacity:0}
   .nightfx.play span{animation:floatUp 2.1s ease-out forwards}
   @keyframes floatUp{0%{opacity:0;transform:translate(0,6px) scale(.6)}
