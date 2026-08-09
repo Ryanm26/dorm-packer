@@ -113,12 +113,18 @@
   .progress .title{font-size:15px;font-weight:650;letter-spacing:-.01em}
   .progress .stat{font-size:13px;color:var(--text-soft);font-variant-numeric:tabular-nums}
   .progress .stat b{color:var(--text);font-weight:700}
-  .track{height:11px;border-radius:var(--pill);overflow:hidden;
+  .track{height:12px;border-radius:var(--pill);overflow:hidden;display:flex;
     background:rgba(120,140,180,.16);box-shadow:inset 0 1px 2px rgba(30,45,90,.12)}
-  .fill{height:100%;width:0%;border-radius:var(--pill);
-    background:linear-gradient(90deg,var(--good-2),var(--primary));
-    box-shadow:0 0 12px rgba(61,111,225,.4);
-    transition:width .55s cubic-bezier(.22,.61,.36,1)}
+  .seg{height:100%;min-width:0;transition:width .55s cubic-bezier(.22,.61,.36,1);
+    background:linear-gradient(180deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c))}
+  .seg + .seg{box-shadow:inset 1.5px 0 0 var(--glass-hi)}
+  .legend{display:flex;flex-wrap:wrap;gap:7px 15px;margin-top:3px}
+  .lg{display:inline-flex;align-items:center;gap:7px;font-size:12px;
+    color:var(--text-soft);font-variant-numeric:tabular-nums}
+  .lg i{width:9px;height:9px;border-radius:3px;flex:none;
+    background:linear-gradient(145deg,color-mix(in srgb,var(--c) 85%,#fff),var(--c));
+    box-shadow:0 1px 3px color-mix(in srgb,var(--c) 45%,transparent)}
+  .lg b{color:var(--text);font-weight:650}
 
   /* ---------- add bar ---------- */
   .adder{padding:15px;display:flex;gap:10px}
@@ -183,6 +189,11 @@
   .cat-head .chev{width:14px;height:14px;flex:none;color:var(--text-faint);transition:transform .25s;
     display:flex;align-items:center;justify-content:center}
   .cat.collapsed .cat-head .chev{transform:rotate(-90deg)}
+  .cat-head .cdot{width:15px;height:15px;border-radius:5px;flex:none;cursor:pointer;
+    border:1px solid rgba(255,255,255,.45);transition:transform .12s;
+    background:linear-gradient(145deg,color-mix(in srgb,var(--c) 84%,#fff),var(--c));
+    box-shadow:0 2px 6px color-mix(in srgb,var(--c) 45%,transparent),var(--inset)}
+  .cat-head .cdot:hover{transform:scale(1.16)}
   .cat-head .name{flex:1;font-size:15.5px;font-weight:650;letter-spacing:-.01em}
   .cat-head .count{font-size:12px;font-weight:650;color:var(--text-soft);
     background:var(--glass-2);border:1px solid var(--glass-border);
@@ -225,6 +236,22 @@
   .item .del:hover{color:#d1554d;background:var(--glass-2)}
   .empty{padding:18px 20px;font-size:13.5px;color:var(--text-faint);font-style:italic}
 
+  /* ---------- color picker popover ---------- */
+  .swatch-pop{position:absolute;z-index:60;display:none;width:200px;padding:14px;
+    border-radius:16px;background:var(--glass);border:1px solid var(--glass-border);
+    box-shadow:var(--sh-lg),var(--inset);
+    -webkit-backdrop-filter:blur(var(--blur)) saturate(180%);backdrop-filter:blur(var(--blur)) saturate(180%)}
+  .swatch-pop.open{display:block;animation:pop .14s ease-out}
+  @keyframes pop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+  .swatch-pop .ttl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--text-faint);margin:0 0 11px}
+  .swatch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .swatch{aspect-ratio:1;border-radius:10px;cursor:pointer;border:2px solid transparent;padding:0;
+    background:linear-gradient(145deg,color-mix(in srgb,var(--c) 86%,#fff),var(--c));
+    box-shadow:0 3px 8px color-mix(in srgb,var(--c) 42%,transparent),var(--inset);transition:transform .12s}
+  .swatch:hover{transform:scale(1.1)}
+  .swatch.sel{border-color:#fff;box-shadow:0 0 0 3px var(--ring),0 3px 8px color-mix(in srgb,var(--c) 42%,transparent)}
+
   @media (hover:none){.cat-head .del,.item .del{opacity:.6}}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -247,7 +274,8 @@
       <span class="title">Packing progress</span>
       <span class="stat" id="stat"><b>0</b> of <b>0</b> packed · 0%</span>
     </div>
-    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="track" id="track"></div>
+    <div class="legend" id="legend"></div>
   </section>
 
   <form class="glass adder" id="adder" autocomplete="off">
@@ -274,19 +302,22 @@
   <main id="cats"></main>
 </div>
 
+<div class="swatch-pop" id="swatchPop"></div>
+
 <script>
 const KEY="dormPacker3000.v2";
 const LABEL_COLORS=["#3d6fe1","#2aab77","#c98a2b","#8a6fb0","#d1554d","#2f9aa7","#7c94b8","#b06a86"];
+const GROUP_COLORS=["#5b8def","#33c2a6","#7b6ef0","#eaa25c","#e884b6","#ef8378","#a78bfa","#40b6d8"];
 const uid=()=>Math.random().toString(36).slice(2,9);
 const $=id=>document.getElementById(id);
 
 function seed(){
   const cats=[
-    {id:"c1",name:"Bedding",collapsed:false},
-    {id:"c2",name:"Bathroom",collapsed:false},
-    {id:"c3",name:"Electronics",collapsed:false},
-    {id:"c4",name:"Kitchen & Snacks",collapsed:false},
-    {id:"c5",name:"Study & Supplies",collapsed:false},
+    {id:"c1",name:"Bedding",collapsed:false,color:"#5b8def"},
+    {id:"c2",name:"Bathroom",collapsed:false,color:"#33c2a6"},
+    {id:"c3",name:"Electronics",collapsed:false,color:"#7b6ef0"},
+    {id:"c4",name:"Kitchen & Snacks",collapsed:false,color:"#eaa25c"},
+    {id:"c5",name:"Study & Supplies",collapsed:false,color:"#e884b6"},
   ];
   const labels=[
     {id:"l1",name:"must-have",color:"#d1554d"},
@@ -308,7 +339,8 @@ function seed(){
 
 let state=load();
 function load(){
-  try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.cats)return s;}catch(e){}
+  try{const s=JSON.parse(localStorage.getItem(KEY));
+    if(s&&s.cats){s.cats.forEach((c,i)=>{if(!c.color)c.color=GROUP_COLORS[i%GROUP_COLORS.length];});return s;}}catch(e){}
   return seed();
 }
 function save(){
@@ -341,6 +373,7 @@ function render(){
     return `<section class="glass cat ${c.collapsed?'collapsed':''}">
       <div class="cat-head" data-toggle="${c.id}">
         <span class="chev">${chev()}</span>
+        <span class="cdot" data-colordot="${c.id}" style="--c:${c.color}" title="Change group color"></span>
         <span class="name">${esc(c.name)}</span>
         <span class="count ${all.length&&done===all.length?'done':''}">${done}/${all.length}</span>
         <button class="del" data-delcat="${c.id}" title="Delete group">🗑</button>
@@ -351,7 +384,14 @@ function render(){
 
   const total=state.items.length,packed=state.items.filter(i=>i.done).length;
   const pct=total?Math.round(packed/total*100):0;
-  $("fill").style.width=pct+"%";
+  $("track").innerHTML=state.cats.map(c=>{
+    const inC=state.items.filter(i=>i.categoryId===c.id),dn=inC.filter(i=>i.done).length;
+    return dn>0?`<span class="seg" title="${esc(c.name)}: ${dn}/${inC.length} packed" style="width:${dn/total*100}%;--c:${c.color}"></span>`:"";
+  }).join("");
+  $("legend").innerHTML=state.cats.map(c=>{
+    const inC=state.items.filter(i=>i.categoryId===c.id);
+    return `<span class="lg" style="--c:${c.color}"><i></i>${esc(c.name)} <b>${inC.filter(i=>i.done).length}/${inC.length}</b></span>`;
+  }).join("");
   $("stat").innerHTML=`<b>${packed}</b> of <b>${total}</b> packed · ${pct}%`;
   save();
 }
@@ -386,8 +426,33 @@ $("itemCat").addEventListener("change",e=>{
   else{state.lastCat=e.target.value;save();}
 });
 
+/* ---------- group color picker popover ---------- */
+let colorTarget=null,popOpen=false;
+const swatchPop=$("swatchPop");
+function openPop(anchor,catId){
+  colorTarget=catId;
+  const cur=(state.cats.find(c=>c.id===catId)?.color||"").toLowerCase();
+  swatchPop.innerHTML=`<p class="ttl">Group color</p><div class="swatch-grid">`+
+    GROUP_COLORS.map(col=>`<button type="button" class="swatch ${col.toLowerCase()===cur?'sel':''}" data-swatch="${col}" style="--c:${col}" title="${col}"></button>`).join("")+`</div>`;
+  swatchPop.classList.add("open");popOpen=true;
+  const r=anchor.getBoundingClientRect(),w=swatchPop.offsetWidth,vw=document.documentElement.clientWidth;
+  let left=Math.min(r.left+window.scrollX,window.scrollX+vw-w-12);
+  left=Math.max(window.scrollX+8,left);
+  swatchPop.style.left=left+"px";
+  swatchPop.style.top=(r.bottom+window.scrollY+8)+"px";
+}
+function closePop(){swatchPop.classList.remove("open");popOpen=false;colorTarget=null;}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&popOpen)closePop();});
+window.addEventListener("scroll",()=>{if(popOpen)closePop();},true);
+
 document.addEventListener("click",e=>{
   const t=e.target,g=a=>t.getAttribute(a),cl=s=>t.closest(s);
+  // group color picker
+  if(cl("[data-swatch]")){const col=cl("[data-swatch]").getAttribute("data-swatch");
+    const c=state.cats.find(x=>x.id===colorTarget);if(c)c.color=col;closePop();render();return;}
+  const cdot=cl("[data-colordot]");
+  if(cdot){e.stopPropagation();openPop(cdot,cdot.getAttribute("data-colordot"));return;}
+  if(popOpen&&!cl(".swatch-pop"))closePop();
   if(g("data-check")!==null){const i=state.items.find(x=>x.id===g("data-check"));i.done=t.checked;render();return;}
   if(cl("[data-delitem]")){const id=cl("[data-delitem]").getAttribute("data-delitem");
     state.items=state.items.filter(x=>x.id!==id);render();return;}
@@ -418,7 +483,8 @@ $("resetBtn").addEventListener("click",()=>{
 });
 
 function newCategory(){const name=prompt("Name your new group (e.g. Laundry, Decor):");
-  if(!name||!name.trim())return null;const c={id:uid(),name:name.trim(),collapsed:false};
+  if(!name||!name.trim())return null;
+  const c={id:uid(),name:name.trim(),collapsed:false,color:GROUP_COLORS[state.cats.length%GROUP_COLORS.length]};
   state.cats.push(c);return c.id;}
 function newLabel(){const name=prompt("New label name (e.g. urgent, ask-roommate):");
   if(!name||!name.trim())return null;
