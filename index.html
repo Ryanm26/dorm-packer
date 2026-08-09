@@ -130,36 +130,46 @@
     22%{opacity:1;transform:scale(1.03)}40%{opacity:.85;transform:scale(1)}
     60%{opacity:1;transform:scale(1.05)}80%{opacity:.93;transform:scale(1.01)}}
 
-  /* jellyfish gifs — light-mode ocean, roaming the sides on smooth loops */
-  .jelly{position:absolute;width:132px;height:auto;opacity:.85;will-change:transform;pointer-events:none}
-  .j-pink{left:2vw;top:7%;
-    filter:hue-rotate(120deg) saturate(1.15) drop-shadow(0 0 14px rgba(255,140,200,.5));
-    animation:roam1 42s ease-in-out infinite}
-  .j-blue{right:3vw;top:38%;width:114px;
-    filter:drop-shadow(0 0 14px rgba(90,170,255,.55));
-    animation:roam2 50s ease-in-out infinite;animation-delay:-14s}
-  .j-orange{left:4vw;bottom:2%;width:122px;
-    filter:hue-rotate(172deg) saturate(1.25) drop-shadow(0 0 14px rgba(255,170,90,.5));
-    animation:roam3 46s ease-in-out infinite;animation-delay:-24s}
-  @keyframes roam1{0%,100%{transform:translate(0,0)}25%{transform:translate(3.5vw,15vh)}
-    50%{transform:translate(-1vw,30vh)}75%{transform:translate(2.5vw,14vh)}}
-  @keyframes roam2{0%,100%{transform:translate(0,0)}25%{transform:translate(-3vw,-14vh)}
-    50%{transform:translate(1.5vw,-26vh)}75%{transform:translate(-2.5vw,-10vh)}}
-  @keyframes roam3{0%,100%{transform:translate(0,0)}25%{transform:translate(4vw,-12vh)}
-    50%{transform:translate(-1.5vw,-24vh)}75%{transform:translate(3vw,-8vh)}}
-  @media (max-width:640px){.j-blue{display:none}.jelly{width:96px}}
+  /* jellyfish (SVG) — light-mode ocean; bell pulses up/down, tentacles trail & sway */
+  .jelly{position:absolute;--jc:#7ad0e6;animation:drift 46s ease-in-out infinite}
+  .jelly .hover{animation:bob 5.6s ease-in-out infinite}
+  .jelly .art{display:block;width:100%;height:auto;overflow:visible;
+    filter:drop-shadow(0 4px 13px color-mix(in srgb,var(--jc) 55%,transparent))}
+  .jelly .bell{transform-box:fill-box;transform-origin:50% 34%;animation:pulse 5.6s ease-in-out infinite}
+  .jelly .tent{transform-box:fill-box;transform-origin:50% 0%;animation:sway 6.8s ease-in-out infinite}
+  .j1{left:4vw;top:13%;width:104px;--jc:#ff9ecf}
+  .j2{right:4vw;top:40%;width:82px;--jc:#7ad0e6;animation-delay:-14s}
+  .j3{left:9vw;bottom:20%;width:116px;--jc:#ffab8a;animation-delay:-27s}
+  .j2 .hover,.j2 .bell{animation-duration:6.6s;animation-delay:-2s}
+  .j3 .hover,.j3 .bell{animation-duration:5s;animation-delay:-3s}
+  .j2 .tent{animation-duration:7.6s;animation-delay:-3s}
+  .j3 .tent{animation-duration:6s;animation-delay:-1s}
+  @keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(3.5vw)}}
+  @keyframes bob{0%,100%{transform:translateY(7px)}50%{transform:translateY(-15px)}}
+  @keyframes pulse{0%,100%{transform:scaleY(1) scaleX(1)}50%{transform:scaleY(.9) scaleX(1.06)}}
+  @keyframes sway{0%,100%{transform:rotate(-3.5deg)}50%{transform:rotate(3.5deg)}}
+  @media (max-width:640px){.j2{display:none}.j1{width:82px}.j3{width:92px}}
 
-  /* sandy sunlight blobs (top) + coral reef (bottom) — light-mode ocean */
-  .sand{position:absolute;border-radius:50%;filter:blur(34px)}
-  .sand-a{width:360px;height:210px;left:-50px;top:-56px;
-    background:radial-gradient(circle,rgba(235,210,150,.6),rgba(235,210,150,0) 70%)}
-  .sand-b{width:320px;height:200px;right:-40px;top:-46px;
-    background:radial-gradient(circle,rgba(242,222,168,.5),rgba(242,222,168,0) 70%)}
-  .coral{position:absolute;bottom:-6px}
-  .coral svg{display:block;width:100%;height:auto;opacity:.6}
-  .coral-l{left:1vw;width:180px}
-  .coral-r{right:1vw;width:210px}
-  @media (max-width:640px){.coral-r{display:none}.coral-l{width:150px}}
+  /* coral images + rising bubbles — light-mode ocean */
+  .coral{position:absolute;pointer-events:none;opacity:.9;
+    filter:drop-shadow(0 4px 10px rgba(20,60,90,.22))}
+  .c-blue{left:.5vw;bottom:-14px;width:158px}
+  .c-orange{right:1.5vw;bottom:-10px;width:130px}
+  .c-red{right:-1.4vw;top:29%;width:118px;transform:rotate(-8deg);opacity:.82}
+  @media (max-width:640px){.c-red{display:none}.c-blue{width:118px}.c-orange{width:100px}}
+  .bubble{position:absolute;bottom:-40px;border-radius:50%;opacity:0;
+    background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.9),rgba(255,255,255,.14) 62%,rgba(255,255,255,.03));
+    border:1px solid rgba(255,255,255,.55);animation:rise linear infinite}
+  .b1{left:8%;width:10px;height:10px;animation-duration:11s;animation-delay:-2s}
+  .b2{left:15%;width:6px;height:6px;animation-duration:9s;animation-delay:-5s}
+  .b3{left:79%;width:12px;height:12px;animation-duration:13s;animation-delay:-1s}
+  .b4{left:88%;width:7px;height:7px;animation-duration:10s;animation-delay:-7s}
+  .b5{left:49%;width:8px;height:8px;animation-duration:12s;animation-delay:-9s}
+  .b6{left:31%;width:5px;height:5px;animation-duration:8.5s;animation-delay:-3s}
+  .b7{left:65%;width:9px;height:9px;animation-duration:11.5s;animation-delay:-6s}
+  @keyframes rise{0%{transform:translate(0,0);opacity:0}12%{opacity:.6}
+    50%{transform:translate(10px,-52vh)}88%{opacity:.5}
+    100%{transform:translate(-6px,-105vh);opacity:0}}
 
   /* occasional shooting star — night only */
   .stars{z-index:3}
@@ -428,33 +438,71 @@
   <span class="shooting s2"></span>
 </div>
 <div class="tank" aria-hidden="true">
-  <span class="sand sand-a"></span>
-  <span class="sand sand-b"></span>
-  <img class="jelly j-pink" src="jellyfish.gif" alt="" width="190" height="232">
-  <img class="jelly j-blue" src="jellyfish.gif" alt="" width="190" height="232">
-  <img class="jelly j-orange" src="jellyfish.gif" alt="" width="190" height="232">
-  <div class="coral coral-l">
-    <svg viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="18" y="72" width="22" height="108" rx="11" fill="#ff9ec4"/>
-      <rect x="44" y="40" width="20" height="140" rx="10" fill="#ff8f6b"/>
-      <rect x="68" y="92" width="18" height="88" rx="9" fill="#ffb26b"/>
-      <rect x="90" y="60" width="20" height="120" rx="10" fill="#ff7fa8"/>
-      <rect x="114" y="104" width="16" height="76" rx="8" fill="#ff9f6b"/>
-      <path d="M158 180C158 130 146 120 156 88M156 118C156 106 170 100 176 86M156 128C156 116 142 110 136 96"
-        stroke="#ff8fae" stroke-width="10" stroke-linecap="round"/>
+  <div class="jelly j1"><div class="hover">
+    <svg class="art" viewBox="0 0 120 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="jg1" gradientUnits="userSpaceOnUse" x1="60" y1="18" x2="60" y2="288">
+        <stop offset="0" stop-color="#ff9ecf" stop-opacity=".82"/>
+        <stop offset=".5" stop-color="#ff9ecf" stop-opacity=".36"/>
+        <stop offset="1" stop-color="#a98bff" stop-opacity="0"/></linearGradient></defs>
+      <g class="tent" stroke="url(#jg1)" fill="none" stroke-linecap="round">
+        <path d="M22 74q-9 60 0 120q9 50-3 98" stroke-width="1.6"/>
+        <path d="M40 78q-5 66 2 128q7 44-3 86" stroke-width="1.6"/>
+        <path d="M60 80q0 70 0 130q0 46 0 88" stroke-width="1.6"/>
+        <path d="M80 78q5 66-2 128q-7 44 3 86" stroke-width="1.6"/>
+        <path d="M98 74q9 60 0 120q-9 50 3 98" stroke-width="1.6"/>
+        <path d="M48 80q-8 34-3 64q5 22-3 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M60 82q0 36 0 66q0 22 0 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M72 80q8 34 3 64q-5 22 3 44" stroke-width="4" stroke-opacity=".7"/>
+      </g>
+      <path class="bell" fill="url(#jg1)" d="M14 64C14 18 106 18 106 64Q104 78 92 76Q80 74 74 80Q66 75 58 80Q50 75 42 80Q30 74 28 76Q16 78 14 64Z"/>
+      <ellipse cx="48" cy="42" rx="15" ry="8" fill="#fff" opacity=".28"/>
     </svg>
-  </div>
-  <div class="coral coral-r">
-    <svg viewBox="0 0 220 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M40 190C40 130 26 120 38 84M38 116C38 104 22 98 16 84M38 128C38 116 54 110 60 96"
-        stroke="#ff9f6b" stroke-width="11" stroke-linecap="round"/>
-      <rect x="70" y="60" width="22" height="130" rx="11" fill="#ff7fa8"/>
-      <rect x="96" y="96" width="18" height="94" rx="9" fill="#ffb26b"/>
-      <rect x="118" y="46" width="22" height="144" rx="11" fill="#ff8f6b"/>
-      <rect x="144" y="100" width="18" height="90" rx="9" fill="#ff9ec4"/>
-      <rect x="166" y="76" width="20" height="114" rx="10" fill="#ffa878"/>
+  </div></div>
+  <div class="jelly j2"><div class="hover">
+    <svg class="art" viewBox="0 0 120 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="jg2" gradientUnits="userSpaceOnUse" x1="60" y1="18" x2="60" y2="288">
+        <stop offset="0" stop-color="#7ad0e6" stop-opacity=".82"/>
+        <stop offset=".5" stop-color="#7ad0e6" stop-opacity=".36"/>
+        <stop offset="1" stop-color="#6aa8ff" stop-opacity="0"/></linearGradient></defs>
+      <g class="tent" stroke="url(#jg2)" fill="none" stroke-linecap="round">
+        <path d="M22 74q-9 60 0 120q9 50-3 98" stroke-width="1.6"/>
+        <path d="M40 78q-5 66 2 128q7 44-3 86" stroke-width="1.6"/>
+        <path d="M60 80q0 70 0 130q0 46 0 88" stroke-width="1.6"/>
+        <path d="M80 78q5 66-2 128q-7 44 3 86" stroke-width="1.6"/>
+        <path d="M98 74q9 60 0 120q-9 50 3 98" stroke-width="1.6"/>
+        <path d="M48 80q-8 34-3 64q5 22-3 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M60 82q0 36 0 66q0 22 0 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M72 80q8 34 3 64q-5 22 3 44" stroke-width="4" stroke-opacity=".7"/>
+      </g>
+      <path class="bell" fill="url(#jg2)" d="M14 64C14 18 106 18 106 64Q104 78 92 76Q80 74 74 80Q66 75 58 80Q50 75 42 80Q30 74 28 76Q16 78 14 64Z"/>
+      <ellipse cx="48" cy="42" rx="15" ry="8" fill="#fff" opacity=".28"/>
     </svg>
-  </div>
+  </div></div>
+  <div class="jelly j3"><div class="hover">
+    <svg class="art" viewBox="0 0 120 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="jg3" gradientUnits="userSpaceOnUse" x1="60" y1="18" x2="60" y2="288">
+        <stop offset="0" stop-color="#ffab8a" stop-opacity=".82"/>
+        <stop offset=".5" stop-color="#ffab8a" stop-opacity=".36"/>
+        <stop offset="1" stop-color="#e878c0" stop-opacity="0"/></linearGradient></defs>
+      <g class="tent" stroke="url(#jg3)" fill="none" stroke-linecap="round">
+        <path d="M22 74q-9 60 0 120q9 50-3 98" stroke-width="1.6"/>
+        <path d="M40 78q-5 66 2 128q7 44-3 86" stroke-width="1.6"/>
+        <path d="M60 80q0 70 0 130q0 46 0 88" stroke-width="1.6"/>
+        <path d="M80 78q5 66-2 128q-7 44 3 86" stroke-width="1.6"/>
+        <path d="M98 74q9 60 0 120q-9 50 3 98" stroke-width="1.6"/>
+        <path d="M48 80q-8 34-3 64q5 22-3 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M60 82q0 36 0 66q0 22 0 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M72 80q8 34 3 64q-5 22 3 44" stroke-width="4" stroke-opacity=".7"/>
+      </g>
+      <path class="bell" fill="url(#jg3)" d="M14 64C14 18 106 18 106 64Q104 78 92 76Q80 74 74 80Q66 75 58 80Q50 75 42 80Q30 74 28 76Q16 78 14 64Z"/>
+      <ellipse cx="48" cy="42" rx="15" ry="8" fill="#fff" opacity=".28"/>
+    </svg>
+  </div></div>
+  <img class="coral c-blue" src="coral-blue.png" alt="">
+  <img class="coral c-orange" src="coral-orange.png" alt="">
+  <img class="coral c-red" src="coral-red.png" alt="">
+  <span class="bubble b1"></span><span class="bubble b2"></span><span class="bubble b3"></span>
+  <span class="bubble b4"></span><span class="bubble b5"></span><span class="bubble b6"></span><span class="bubble b7"></span>
 </div>
 <div class="nightfx" id="nightfx" aria-hidden="true"></div>
 
