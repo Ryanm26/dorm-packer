@@ -25,26 +25,36 @@
     --b1:rgba(122,150,246,.55); --b2:rgba(120,214,206,.5);
     --b3:rgba(246,178,150,.4);  --b4:rgba(178,150,244,.5);
   }
-  @media (prefers-color-scheme:dark){
-    :root{
-      --text:#e9eef8; --text-soft:#a7b4c9; --text-faint:#6f7d95;
-      --glass:rgba(24,32,48,.5);
-      --glass-2:rgba(24,32,48,.34);
-      --glass-hi:rgba(255,255,255,.10);
-      --glass-border:rgba(255,255,255,.12);
-      --stroke:rgba(255,255,255,.08);
-      --chip-bg:#1b2436;
+  /* warm cozy dark theme — applied by system pref (unless user forced light) or the Totoro toggle */
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+      --text:#f2eae0; --text-soft:#cbbaa6; --text-faint:#94836f;
+      --glass:rgba(46,31,23,.54); --glass-2:rgba(46,31,23,.38);
+      --glass-hi:rgba(255,240,220,.10); --glass-border:rgba(255,230,204,.14);
+      --stroke:rgba(255,230,204,.09); --chip-bg:#2a1d15;
       --primary:#6f92ff; --primary-2:#9b86ff; --primary-ink:#0b1020;
       --ring:rgba(111,146,255,.4);
-      --good:#40c58c; --good-2:#57d3a0;
-      --sh:0 10px 30px rgba(0,0,0,.45);
-      --sh-lg:0 24px 55px rgba(0,0,0,.55);
-      --inset:inset 0 1px 0 rgba(255,255,255,.07);
-      --arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23a7b4c9' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      --base:linear-gradient(160deg,#0a1018 0%,#0c1720 55%,#12101e 100%);
-      --b1:rgba(70,104,220,.42); --b2:rgba(40,178,168,.32);
-      --b3:rgba(150,96,220,.34); --b4:rgba(96,120,240,.3);
-    }
+      --good:#4fbe86; --good-2:#63d19a;
+      --sh:0 10px 30px rgba(0,0,0,.5); --sh-lg:0 24px 55px rgba(0,0,0,.58);
+      --inset:inset 0 1px 0 rgba(255,240,220,.08);
+      --arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23cbbaa6' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      --base:linear-gradient(165deg,#1b110b 0%,#241610 46%,#2c1a1e 100%);
+      --b1:rgba(240,170,90,.34); --b2:rgba(220,122,84,.30);
+      --b3:rgba(200,104,122,.26); --b4:rgba(234,196,120,.26);
+  }}
+  :root[data-theme="dark"]{
+      --text:#f2eae0; --text-soft:#cbbaa6; --text-faint:#94836f;
+      --glass:rgba(46,31,23,.54); --glass-2:rgba(46,31,23,.38);
+      --glass-hi:rgba(255,240,220,.10); --glass-border:rgba(255,230,204,.14);
+      --stroke:rgba(255,230,204,.09); --chip-bg:#2a1d15;
+      --primary:#6f92ff; --primary-2:#9b86ff; --primary-ink:#0b1020;
+      --ring:rgba(111,146,255,.4);
+      --good:#4fbe86; --good-2:#63d19a;
+      --sh:0 10px 30px rgba(0,0,0,.5); --sh-lg:0 24px 55px rgba(0,0,0,.58);
+      --inset:inset 0 1px 0 rgba(255,240,220,.08);
+      --arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23cbbaa6' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      --base:linear-gradient(165deg,#1b110b 0%,#241610 46%,#2c1a1e 100%);
+      --b1:rgba(240,170,90,.34); --b2:rgba(220,122,84,.30);
+      --b3:rgba(200,104,122,.26); --b4:rgba(234,196,120,.26);
   }
   *{box-sizing:border-box}
   html,body{margin:0}
@@ -74,14 +84,37 @@
 
   .app{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 
-  /* little Totoro companion */
-  .mascot{position:fixed;right:14px;bottom:8px;width:94px;height:auto;z-index:4;
-    pointer-events:none;transform-origin:bottom center;
+  /* little Totoro companion — click to toggle light/dark */
+  .mascot{position:fixed;right:14px;bottom:8px;width:94px;z-index:6;
+    padding:0;border:0;background:none;cursor:pointer;transform-origin:bottom center;
+    -webkit-tap-highlight-color:transparent;
     filter:drop-shadow(0 7px 11px rgba(30,45,90,.28));
     animation:bob 4.5s ease-in-out infinite}
+  .mascot img{width:100%;height:auto;display:block;pointer-events:none;transition:transform .18s}
+  .mascot:hover img{transform:scale(1.09)}
+  .mascot:active img{transform:scale(.95)}
+  .mascot:focus-visible{outline:none;border-radius:16px;box-shadow:0 0 0 3px var(--ring)}
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
   @media (max-width:600px){.mascot{width:62px;right:8px;bottom:6px}}
   @media (prefers-reduced-motion:reduce){.mascot{animation:none;transform:rotate(-2deg)}}
+
+  /* minimal retro lamps — only in dark mode */
+  .lamps{position:fixed;inset:0;z-index:-1;pointer-events:none;display:none;overflow:hidden}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lamps{display:block}}
+  :root[data-theme="dark"] .lamps{display:block}
+  :root[data-theme="light"] .lamps{display:none}
+  .lamp{position:absolute}
+  .lamp .glow{position:absolute;border-radius:50%;filter:blur(26px)}
+  .lamp .art{position:relative;display:block;opacity:.6}
+  .lamp-a{left:-3vw;bottom:-12px}
+  .lamp-a .art{width:172px;height:auto}
+  .lamp-a .glow{width:300px;height:300px;left:-52px;top:-24px;
+    background:radial-gradient(circle,rgba(246,182,96,.55),rgba(245,150,80,0) 68%)}
+  .lamp-b{right:-2vw;bottom:24vh}
+  .lamp-b .art{width:126px;height:auto;transform:scaleX(-1)}
+  .lamp-b .glow{width:236px;height:236px;right:-46px;top:-26px;
+    background:radial-gradient(circle,rgba(242,168,112,.46),rgba(240,150,90,0) 68%)}
+  @media (max-width:640px){.lamp-a .art{width:120px}.lamp-b{display:none}}
 
   /* glass surface */
   .glass{
@@ -293,7 +326,29 @@
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
+<script>try{var _t=localStorage.getItem("dormPacker.theme");if(_t)document.documentElement.setAttribute("data-theme",_t);}catch(e){}</script>
+
 <div class="bg" aria-hidden="true"></div>
+<div class="lamps" aria-hidden="true">
+  <div class="lamp lamp-a">
+    <span class="glow"></span>
+    <svg class="art" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 58a40 40 0 0 1 80 0z" fill="#e8a55e" fill-opacity=".9"/>
+      <path d="M20 58h80" stroke="#f6d9a6" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="56" y="58" width="8" height="66" rx="4" fill="#c98a4e"/>
+      <path d="M32 128q28-13 56 0l4 9H28z" fill="#c98a4e"/>
+    </svg>
+  </div>
+  <div class="lamp lamp-b">
+    <span class="glow"></span>
+    <svg class="art" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 54a36 36 0 0 1 72 0z" fill="#e79a6a" fill-opacity=".9"/>
+      <path d="M24 54h72" stroke="#f6d2ad" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="56" y="54" width="8" height="70" rx="4" fill="#c07f52"/>
+      <path d="M34 128q26-12 52 0l3 9H31z" fill="#c07f52"/>
+    </svg>
+  </div>
+</div>
 
 <div class="app">
   <header class="app-header">
@@ -341,7 +396,9 @@
   <main id="cats"></main>
 </div>
 
-<img class="mascot" src="totoro.gif" alt="A little Totoro holding a leaf, cheering you on" width="500" height="500">
+<button class="mascot" id="themeToggle" type="button" title="Click to toggle light / dark" aria-label="Toggle light or dark mode">
+  <img src="totoro.gif" alt="A little Totoro holding a leaf" width="500" height="500">
+</button>
 
 <div class="swatch-pop" id="swatchPop"></div>
 
@@ -557,6 +614,16 @@ function exportCSV(){
   a.href=url;a.download="dorm-packing-list.csv";document.body.appendChild(a);a.click();
   a.remove();URL.revokeObjectURL(url);
 }
+
+/* ---------- Totoro light/dark toggle ---------- */
+const THEME_KEY="dormPacker.theme";
+function effectiveTheme(){const a=document.documentElement.getAttribute("data-theme");
+  return a||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");}
+$("themeToggle").addEventListener("click",()=>{
+  const next=effectiveTheme()==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",next);
+  try{localStorage.setItem(THEME_KEY,next);}catch(e){}
+});
 
 render();
 </script>
