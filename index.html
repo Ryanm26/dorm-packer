@@ -129,6 +129,14 @@
     22%{opacity:1;transform:scale(1.03)}40%{opacity:.85;transform:scale(1)}
     60%{opacity:1;transform:scale(1.05)}80%{opacity:.93;transform:scale(1.01)}}
 
+  /* cozy wall shelves with books + a plant (night only) */
+  .shelf{position:absolute;opacity:.85;filter:drop-shadow(0 6px 11px rgba(0,0,0,.45))}
+  .shelf svg{display:block;width:100%;height:auto}
+  .shelf-l{left:1.5vw;top:15%;width:200px}
+  .shelf-r{right:1.5vw;top:9%;width:210px;transform:scaleX(-1)}
+  @media (max-width:900px){.shelf-r{display:none}}
+  @media (max-width:640px){.shelf{display:none}}
+
   /* jellyfish (SVG) — light-mode ocean; bell pulses up/down, tentacles trail & sway */
   .jelly{position:absolute;--jc:#7ad0e6;animation:drift 46s ease-in-out infinite}
   .jelly .hover{animation:bob 5.6s ease-in-out infinite}
@@ -181,8 +189,7 @@
     background:linear-gradient(90deg,rgba(255,246,224,0),rgba(255,246,224,.95));
     filter:drop-shadow(0 0 6px rgba(255,240,210,.85))}
   .s1{animation:shoot 23s ease-in infinite}
-  .s2{animation:shoot2 31s ease-in infinite;animation-delay:-11s;
-    background:linear-gradient(90deg,rgba(255,246,224,.95),rgba(255,246,224,0))}
+  .s2{animation:shoot2 31s ease-in infinite;animation-delay:-11s}
   @keyframes shoot{0%,90%{opacity:0;transform:translate(6vw,-8vh) rotate(20deg)}
     91.5%{opacity:1}97%{opacity:1;transform:translate(78vw,52vh) rotate(20deg)}
     98%,100%{opacity:0;transform:translate(80vw,54vh) rotate(20deg)}}
@@ -433,6 +440,44 @@
       <circle cx="90" cy="88" r="84" fill="url(#donutG)"/>
       <circle cx="90" cy="88" r="17" fill="#dd8b41"/>
       <circle cx="90" cy="88" r="17" fill="none" stroke="#c9762f" stroke-width="3" opacity=".55"/>
+    </svg>
+  </div>
+  <div class="shelf shelf-l">
+    <svg viewBox="0 0 200 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="16" y="58" width="16" height="46" rx="2" fill="#c56a4a"/>
+      <rect x="34" y="48" width="14" height="56" rx="2" fill="#c9a25e"/>
+      <rect x="50" y="62" width="16" height="42" rx="2" fill="#5f8079"/>
+      <rect x="68" y="54" width="14" height="50" rx="2" fill="#8a6f8e"/>
+      <rect x="84" y="60" width="13" height="44" rx="2" fill="#cf9d5e" transform="rotate(9 90 104)"/>
+      <rect x="100" y="66" width="15" height="38" rx="2" fill="#b46a86"/>
+      <ellipse cx="152" cy="62" rx="5" ry="15" transform="rotate(-22 152 62)" fill="#7a9a6e"/>
+      <ellipse cx="160" cy="55" rx="5" ry="17" fill="#8aa87a"/>
+      <ellipse cx="168" cy="62" rx="5" ry="15" transform="rotate(22 168 62)" fill="#6f8f63"/>
+      <path d="M146 104 L149 82 H171 L174 104 Z" fill="#b5674a"/>
+      <rect x="147" y="80" width="26" height="6" rx="2" fill="#c67f5c"/>
+      <rect x="2" y="104" width="196" height="13" rx="3" fill="#6e4d37"/>
+      <rect x="2" y="104" width="196" height="4" rx="2" fill="#875f44"/>
+      <rect x="24" y="117" width="8" height="9" fill="#5a3f2d"/>
+      <rect x="168" y="117" width="8" height="9" fill="#5a3f2d"/>
+    </svg>
+  </div>
+  <div class="shelf shelf-r">
+    <svg viewBox="0 0 200 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="16" y="58" width="16" height="46" rx="2" fill="#c56a4a"/>
+      <rect x="34" y="48" width="14" height="56" rx="2" fill="#c9a25e"/>
+      <rect x="50" y="62" width="16" height="42" rx="2" fill="#5f8079"/>
+      <rect x="68" y="54" width="14" height="50" rx="2" fill="#8a6f8e"/>
+      <rect x="84" y="60" width="13" height="44" rx="2" fill="#cf9d5e" transform="rotate(9 90 104)"/>
+      <rect x="100" y="66" width="15" height="38" rx="2" fill="#b46a86"/>
+      <ellipse cx="152" cy="62" rx="5" ry="15" transform="rotate(-22 152 62)" fill="#7a9a6e"/>
+      <ellipse cx="160" cy="55" rx="5" ry="17" fill="#8aa87a"/>
+      <ellipse cx="168" cy="62" rx="5" ry="15" transform="rotate(22 168 62)" fill="#6f8f63"/>
+      <path d="M146 104 L149 82 H171 L174 104 Z" fill="#b5674a"/>
+      <rect x="147" y="80" width="26" height="6" rx="2" fill="#c67f5c"/>
+      <rect x="2" y="104" width="196" height="13" rx="3" fill="#6e4d37"/>
+      <rect x="2" y="104" width="196" height="4" rx="2" fill="#875f44"/>
+      <rect x="24" y="117" width="8" height="9" fill="#5a3f2d"/>
+      <rect x="168" y="117" width="8" height="9" fill="#5a3f2d"/>
     </svg>
   </div>
 </div>
