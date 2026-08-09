@@ -21,9 +21,9 @@
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%2353617c' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     /* ambient gradient blooms */
-    --base:linear-gradient(160deg,#e9f0fc 0%,#eef6f4 55%,#f3edfb 100%);
-    --b1:rgba(122,150,246,.55); --b2:rgba(120,214,206,.5);
-    --b3:rgba(246,178,150,.4);  --b4:rgba(178,150,244,.5);
+    --base:linear-gradient(180deg,#e5f3fa 0%,#d1e9f4 46%,#bfe1ef 100%);
+    --b1:rgba(116,186,224,.55); --b2:rgba(140,222,214,.5);
+    --b3:rgba(180,212,240,.5);  --b4:rgba(126,200,224,.5);
   }
   /* warm cozy dark theme — applied by system pref (unless user forced light) or the Totoro toggle */
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -98,12 +98,17 @@
   @media (max-width:600px){.mascot{width:62px;right:8px;bottom:6px}}
   @media (prefers-reduced-motion:reduce){.mascot{animation:none;transform:rotate(-2deg)}}
 
-  /* ambient dark-mode layers — only shown at night */
-  .lamps,.tank{position:fixed;inset:0;z-index:-1;pointer-events:none;display:none;overflow:hidden}
+  /* ambient layers */
+  .lamps,.tank,.stars{position:fixed;inset:0;z-index:-1;pointer-events:none;display:none;overflow:hidden}
+  /* night: lamps + shooting stars */
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lamps,
-    :root:not([data-theme="light"]) .tank{display:block}}
-  :root[data-theme="dark"] .lamps,:root[data-theme="dark"] .tank{display:block}
-  :root[data-theme="light"] .lamps,:root[data-theme="light"] .tank{display:none}
+    :root:not([data-theme="light"]) .stars{display:block}}
+  :root[data-theme="dark"] .lamps,:root[data-theme="dark"] .stars{display:block}
+  :root[data-theme="light"] .lamps,:root[data-theme="light"] .stars{display:none}
+  /* day: jellyfish ocean */
+  @media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .tank{display:block}}
+  :root[data-theme="light"] .tank{display:block}
+  :root[data-theme="dark"] .tank{display:none}
 
   /* retro lamps: mushroom (left) + donut (right), with warm flicker */
   .lamp{position:absolute}
@@ -115,33 +120,50 @@
   .lamp-a .art{width:172px;height:auto}
   .lamp-a .glow{width:300px;height:300px;left:-64px;top:-46px;
     background:radial-gradient(circle,rgba(247,186,102,.6),rgba(245,150,80,0) 66%)}
-  .lamp-b{right:-1vw;bottom:26vh}
-  .lamp-b .art{width:132px;height:auto}
-  .lamp-b .glow{width:250px;height:250px;left:-58px;top:-50px;
-    background:radial-gradient(circle,rgba(245,170,110,.52),rgba(240,150,90,0) 66%);
+  .lamp-b{right:-1vw;bottom:20vh}
+  .lamp-b .art{width:152px;height:auto;opacity:.92}
+  .lamp-b .glow{width:330px;height:330px;left:-86px;top:-94px;
+    background:radial-gradient(circle,rgba(246,176,96,.5),rgba(240,150,90,0) 62%);
     animation-duration:6.8s;animation-delay:-2s}
   @media (max-width:640px){.lamp-a .art{width:122px}.lamp-b{display:none}}
   @keyframes flicker{0%,100%{opacity:.9;transform:scale(1)}
     22%{opacity:1;transform:scale(1.03)}40%{opacity:.85;transform:scale(1)}
     60%{opacity:1;transform:scale(1.05)}80%{opacity:.93;transform:scale(1.01)}}
 
-  /* drifting jellyfish */
-  .jelly{position:absolute;opacity:.5;will-change:transform}
-  .jelly .pulse{transform-origin:50% 22%;animation:jellypulse 3.6s ease-in-out infinite}
-  .jelly svg{display:block;width:100%;height:auto;
-    filter:drop-shadow(0 0 12px color-mix(in srgb,var(--jc) 65%,transparent))}
-  .jelly .bell{fill:var(--jc);fill-opacity:.5}
-  .jelly .tent{stroke:var(--jc);stroke-opacity:.55;fill:none;stroke-width:3;stroke-linecap:round}
-  .j1{top:19%;width:70px;--jc:#f0a94e;animation:swimA 48s linear infinite}
-  .j2{top:53%;width:54px;--jc:#e78a66;animation:swimB 62s linear infinite;animation-delay:-20s}
-  .j3{top:71%;width:88px;--jc:#d98fb0;animation:swimA 56s linear infinite;animation-delay:-32s}
-  .j2 .pulse{animation-duration:4.2s}
-  .j3 .pulse{animation-duration:3s}
-  @keyframes swimA{0%{transform:translate(-22vw,0)}25%{transform:translate(12vw,-3vh)}
-    50%{transform:translate(46vw,2vh)}75%{transform:translate(82vw,-3vh)}100%{transform:translate(122vw,0)}}
-  @keyframes swimB{0%{transform:translate(122vw,0)}25%{transform:translate(80vw,3vh)}
-    50%{transform:translate(44vw,-2vh)}75%{transform:translate(10vw,3vh)}100%{transform:translate(-22vw,0)}}
-  @keyframes jellypulse{0%,100%{transform:scaleY(1) scaleX(1)}50%{transform:scaleY(.88) scaleX(1.05)}}
+  /* jellyfish — light-mode ocean; bell pulses up/down, tentacles trail & sway */
+  .jelly{position:absolute;--jc:#7ad0e6;animation:drift 46s ease-in-out infinite}
+  .jelly .hover{animation:bob 5.6s ease-in-out infinite}
+  .jelly .art{display:block;width:100%;height:auto;overflow:visible;
+    filter:drop-shadow(0 4px 13px color-mix(in srgb,var(--jc) 55%,transparent))}
+  .jelly .bell{transform-box:fill-box;transform-origin:50% 34%;animation:pulse 5.6s ease-in-out infinite}
+  .jelly .tent{transform-box:fill-box;transform-origin:50% 0%;animation:sway 6.8s ease-in-out infinite}
+  .j1{left:4vw;top:15%;width:104px;--jc:#ff9ecf}
+  .j2{right:5vw;top:43%;width:82px;--jc:#7ad0e6;animation-delay:-14s}
+  .j3{left:7vw;bottom:5%;width:120px;--jc:#ffab8a;animation-delay:-27s}
+  .j2 .hover,.j2 .bell{animation-duration:6.6s;animation-delay:-2s}
+  .j3 .hover,.j3 .bell{animation-duration:5s;animation-delay:-3s}
+  .j2 .tent{animation-duration:7.6s;animation-delay:-3s}
+  .j3 .tent{animation-duration:6s;animation-delay:-1s}
+  @keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(3.5vw)}}
+  @keyframes bob{0%,100%{transform:translateY(7px)}50%{transform:translateY(-15px)}}
+  @keyframes pulse{0%,100%{transform:scaleY(1) scaleX(1)}50%{transform:scaleY(.9) scaleX(1.06)}}
+  @keyframes sway{0%,100%{transform:rotate(-3.5deg)}50%{transform:rotate(3.5deg)}}
+  @media (max-width:640px){.j2{display:none}.j1{width:82px}.j3{width:92px}}
+
+  /* occasional shooting star — night only */
+  .stars{z-index:3}
+  .shooting{position:absolute;top:0;left:0;width:150px;height:2px;border-radius:2px;opacity:0;
+    background:linear-gradient(90deg,rgba(255,246,224,0),rgba(255,246,224,.95));
+    filter:drop-shadow(0 0 6px rgba(255,240,210,.85))}
+  .s1{animation:shoot 23s ease-in infinite}
+  .s2{animation:shoot2 31s ease-in infinite;animation-delay:-11s;
+    background:linear-gradient(90deg,rgba(255,246,224,.95),rgba(255,246,224,0))}
+  @keyframes shoot{0%,90%{opacity:0;transform:translate(6vw,-8vh) rotate(20deg)}
+    91.5%{opacity:1}97%{opacity:1;transform:translate(78vw,52vh) rotate(20deg)}
+    98%,100%{opacity:0;transform:translate(80vw,54vh) rotate(20deg)}}
+  @keyframes shoot2{0%,88%{opacity:0;transform:translate(92vw,-6vh) rotate(158deg)}
+    89.5%{opacity:1}95%{opacity:1;transform:translate(14vw,46vh) rotate(158deg)}
+    96%,100%{opacity:0;transform:translate(12vw,48vh) rotate(158deg)}}
 
   /* night-switch fx: moon + zzz drifting off Totoro */
   .nightfx{position:fixed;right:80px;bottom:96px;z-index:7;pointer-events:none}
@@ -377,34 +399,82 @@
   </div>
   <div class="lamp lamp-b">
     <span class="glow"></span>
-    <svg class="art" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="52" y="150" width="36" height="12" rx="6" fill="#b97e45"/>
-      <rect x="66" y="120" width="8" height="34" rx="4" fill="#cf8f4f"/>
-      <circle cx="70" cy="76" r="46" fill="none" stroke="#eba85c" stroke-width="15"/>
-      <circle cx="70" cy="76" r="46" fill="none" stroke="#ffe0a6" stroke-width="5" opacity=".85"/>
+    <svg class="art" viewBox="0 0 180 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="donutG" cx="50%" cy="45%" r="60%">
+        <stop offset="0" stop-color="#fff1cf"/>
+        <stop offset=".55" stop-color="#f6b45f"/>
+        <stop offset="1" stop-color="#e98a3c"/>
+      </radialGradient></defs>
+      <line x1="90" y1="168" x2="90" y2="250" stroke="#c98a4e" stroke-width="2.5" opacity=".45"/>
+      <circle cx="90" cy="88" r="84" fill="url(#donutG)"/>
+      <circle cx="90" cy="88" r="17" fill="#dd8b41"/>
+      <circle cx="90" cy="88" r="17" fill="none" stroke="#c9762f" stroke-width="3" opacity=".55"/>
     </svg>
   </div>
 </div>
+<div class="stars" aria-hidden="true">
+  <span class="shooting s1"></span>
+  <span class="shooting s2"></span>
+</div>
 <div class="tank" aria-hidden="true">
-  <div class="jelly j1"><div class="pulse">
-    <svg viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="bell" d="M8 56C8 20 92 20 92 56C92 66 82 70 68 70H32C18 70 8 66 8 56Z"/>
-      <path class="tent" d="M26 70c-3 26 3 40-2 60"/><path class="tent" d="M42 70c-2 30 2 44 0 62"/>
-      <path class="tent" d="M58 70c2 30-2 44 0 62"/><path class="tent" d="M74 70c3 26-3 40 2 60"/>
+  <div class="jelly j1"><div class="hover">
+    <svg class="art" viewBox="0 0 120 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="jg1" gradientUnits="userSpaceOnUse" x1="60" y1="18" x2="60" y2="288">
+        <stop offset="0" stop-color="#ff9ecf" stop-opacity=".82"/>
+        <stop offset=".5" stop-color="#ff9ecf" stop-opacity=".36"/>
+        <stop offset="1" stop-color="#a98bff" stop-opacity="0"/></linearGradient></defs>
+      <g class="tent" stroke="url(#jg1)" fill="none" stroke-linecap="round">
+        <path d="M22 74q-9 60 0 120q9 50-3 98" stroke-width="1.6"/>
+        <path d="M40 78q-5 66 2 128q7 44-3 86" stroke-width="1.6"/>
+        <path d="M60 80q0 70 0 130q0 46 0 88" stroke-width="1.6"/>
+        <path d="M80 78q5 66-2 128q-7 44 3 86" stroke-width="1.6"/>
+        <path d="M98 74q9 60 0 120q-9 50 3 98" stroke-width="1.6"/>
+        <path d="M48 80q-8 34-3 64q5 22-3 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M60 82q0 36 0 66q0 22 0 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M72 80q8 34 3 64q-5 22 3 44" stroke-width="4" stroke-opacity=".7"/>
+      </g>
+      <path class="bell" fill="url(#jg1)" d="M14 64C14 18 106 18 106 64Q104 78 92 76Q80 74 74 80Q66 75 58 80Q50 75 42 80Q30 74 28 76Q16 78 14 64Z"/>
+      <ellipse cx="48" cy="42" rx="15" ry="8" fill="#fff" opacity=".28"/>
     </svg>
   </div></div>
-  <div class="jelly j2"><div class="pulse">
-    <svg viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="bell" d="M8 56C8 20 92 20 92 56C92 66 82 70 68 70H32C18 70 8 66 8 56Z"/>
-      <path class="tent" d="M26 70c-3 26 3 40-2 60"/><path class="tent" d="M42 70c-2 30 2 44 0 62"/>
-      <path class="tent" d="M58 70c2 30-2 44 0 62"/><path class="tent" d="M74 70c3 26-3 40 2 60"/>
+  <div class="jelly j2"><div class="hover">
+    <svg class="art" viewBox="0 0 120 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="jg2" gradientUnits="userSpaceOnUse" x1="60" y1="18" x2="60" y2="288">
+        <stop offset="0" stop-color="#7ad0e6" stop-opacity=".82"/>
+        <stop offset=".5" stop-color="#7ad0e6" stop-opacity=".36"/>
+        <stop offset="1" stop-color="#6aa8ff" stop-opacity="0"/></linearGradient></defs>
+      <g class="tent" stroke="url(#jg2)" fill="none" stroke-linecap="round">
+        <path d="M22 74q-9 60 0 120q9 50-3 98" stroke-width="1.6"/>
+        <path d="M40 78q-5 66 2 128q7 44-3 86" stroke-width="1.6"/>
+        <path d="M60 80q0 70 0 130q0 46 0 88" stroke-width="1.6"/>
+        <path d="M80 78q5 66-2 128q-7 44 3 86" stroke-width="1.6"/>
+        <path d="M98 74q9 60 0 120q-9 50 3 98" stroke-width="1.6"/>
+        <path d="M48 80q-8 34-3 64q5 22-3 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M60 82q0 36 0 66q0 22 0 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M72 80q8 34 3 64q-5 22 3 44" stroke-width="4" stroke-opacity=".7"/>
+      </g>
+      <path class="bell" fill="url(#jg2)" d="M14 64C14 18 106 18 106 64Q104 78 92 76Q80 74 74 80Q66 75 58 80Q50 75 42 80Q30 74 28 76Q16 78 14 64Z"/>
+      <ellipse cx="48" cy="42" rx="15" ry="8" fill="#fff" opacity=".28"/>
     </svg>
   </div></div>
-  <div class="jelly j3"><div class="pulse">
-    <svg viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="bell" d="M8 56C8 20 92 20 92 56C92 66 82 70 68 70H32C18 70 8 66 8 56Z"/>
-      <path class="tent" d="M26 70c-3 26 3 40-2 60"/><path class="tent" d="M42 70c-2 30 2 44 0 62"/>
-      <path class="tent" d="M58 70c2 30-2 44 0 62"/><path class="tent" d="M74 70c3 26-3 40 2 60"/>
+  <div class="jelly j3"><div class="hover">
+    <svg class="art" viewBox="0 0 120 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="jg3" gradientUnits="userSpaceOnUse" x1="60" y1="18" x2="60" y2="288">
+        <stop offset="0" stop-color="#ffab8a" stop-opacity=".82"/>
+        <stop offset=".5" stop-color="#ffab8a" stop-opacity=".36"/>
+        <stop offset="1" stop-color="#e878c0" stop-opacity="0"/></linearGradient></defs>
+      <g class="tent" stroke="url(#jg3)" fill="none" stroke-linecap="round">
+        <path d="M22 74q-9 60 0 120q9 50-3 98" stroke-width="1.6"/>
+        <path d="M40 78q-5 66 2 128q7 44-3 86" stroke-width="1.6"/>
+        <path d="M60 80q0 70 0 130q0 46 0 88" stroke-width="1.6"/>
+        <path d="M80 78q5 66-2 128q-7 44 3 86" stroke-width="1.6"/>
+        <path d="M98 74q9 60 0 120q-9 50 3 98" stroke-width="1.6"/>
+        <path d="M48 80q-8 34-3 64q5 22-3 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M60 82q0 36 0 66q0 22 0 44" stroke-width="4" stroke-opacity=".7"/>
+        <path d="M72 80q8 34 3 64q-5 22 3 44" stroke-width="4" stroke-opacity=".7"/>
+      </g>
+      <path class="bell" fill="url(#jg3)" d="M14 64C14 18 106 18 106 64Q104 78 92 76Q80 74 74 80Q66 75 58 80Q50 75 42 80Q30 74 28 76Q16 78 14 64Z"/>
+      <ellipse cx="48" cy="42" rx="15" ry="8" fill="#fff" opacity=".28"/>
     </svg>
   </div></div>
 </div>
