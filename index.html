@@ -31,8 +31,8 @@
       --glass:rgba(46,31,23,.54); --glass-2:rgba(46,31,23,.38);
       --glass-hi:rgba(255,240,220,.10); --glass-border:rgba(255,230,204,.14);
       --stroke:rgba(255,230,204,.09); --chip-bg:#2a1d15;
-      --primary:#6f92ff; --primary-2:#9b86ff; --primary-ink:#0b1020;
-      --ring:rgba(111,146,255,.4);
+      --primary:#e8a24e; --primary-2:#e6b866; --primary-ink:#2a1a0b;
+      --ring:rgba(232,162,78,.42);
       --good:#4fbe86; --good-2:#63d19a;
       --sh:0 10px 30px rgba(0,0,0,.5); --sh-lg:0 24px 55px rgba(0,0,0,.58);
       --inset:inset 0 1px 0 rgba(255,240,220,.08);
@@ -46,8 +46,8 @@
       --glass:rgba(46,31,23,.54); --glass-2:rgba(46,31,23,.38);
       --glass-hi:rgba(255,240,220,.10); --glass-border:rgba(255,230,204,.14);
       --stroke:rgba(255,230,204,.09); --chip-bg:#2a1d15;
-      --primary:#6f92ff; --primary-2:#9b86ff; --primary-ink:#0b1020;
-      --ring:rgba(111,146,255,.4);
+      --primary:#e8a24e; --primary-2:#e6b866; --primary-ink:#2a1a0b;
+      --ring:rgba(232,162,78,.42);
       --good:#4fbe86; --good-2:#63d19a;
       --sh:0 10px 30px rgba(0,0,0,.5); --sh-lg:0 24px 55px rgba(0,0,0,.58);
       --inset:inset 0 1px 0 rgba(255,240,220,.08);
@@ -98,23 +98,58 @@
   @media (max-width:600px){.mascot{width:62px;right:8px;bottom:6px}}
   @media (prefers-reduced-motion:reduce){.mascot{animation:none;transform:rotate(-2deg)}}
 
-  /* minimal retro lamps — only in dark mode */
-  .lamps{position:fixed;inset:0;z-index:-1;pointer-events:none;display:none;overflow:hidden}
-  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lamps{display:block}}
-  :root[data-theme="dark"] .lamps{display:block}
-  :root[data-theme="light"] .lamps{display:none}
+  /* ambient dark-mode layers — only shown at night */
+  .lamps,.tank{position:fixed;inset:0;z-index:-1;pointer-events:none;display:none;overflow:hidden}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lamps,
+    :root:not([data-theme="light"]) .tank{display:block}}
+  :root[data-theme="dark"] .lamps,:root[data-theme="dark"] .tank{display:block}
+  :root[data-theme="light"] .lamps,:root[data-theme="light"] .tank{display:none}
+
+  /* retro lamps: mushroom (left) + donut (right), with warm flicker */
   .lamp{position:absolute}
-  .lamp .glow{position:absolute;border-radius:50%;filter:blur(26px)}
-  .lamp .art{position:relative;display:block;opacity:.6}
-  .lamp-a{left:-3vw;bottom:-12px}
+  .lamp .glow{position:absolute;border-radius:50%;filter:blur(30px);
+    animation:flicker 5.5s ease-in-out infinite}
+  .lamp .art{position:relative;display:block;opacity:.74;
+    filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
+  .lamp-a{left:-2vw;bottom:-14px}
   .lamp-a .art{width:172px;height:auto}
-  .lamp-a .glow{width:300px;height:300px;left:-52px;top:-24px;
-    background:radial-gradient(circle,rgba(246,182,96,.55),rgba(245,150,80,0) 68%)}
-  .lamp-b{right:-2vw;bottom:24vh}
-  .lamp-b .art{width:126px;height:auto;transform:scaleX(-1)}
-  .lamp-b .glow{width:236px;height:236px;right:-46px;top:-26px;
-    background:radial-gradient(circle,rgba(242,168,112,.46),rgba(240,150,90,0) 68%)}
-  @media (max-width:640px){.lamp-a .art{width:120px}.lamp-b{display:none}}
+  .lamp-a .glow{width:300px;height:300px;left:-64px;top:-46px;
+    background:radial-gradient(circle,rgba(247,186,102,.6),rgba(245,150,80,0) 66%)}
+  .lamp-b{right:-1vw;bottom:26vh}
+  .lamp-b .art{width:132px;height:auto}
+  .lamp-b .glow{width:250px;height:250px;left:-58px;top:-50px;
+    background:radial-gradient(circle,rgba(245,170,110,.52),rgba(240,150,90,0) 66%);
+    animation-duration:6.8s;animation-delay:-2s}
+  @media (max-width:640px){.lamp-a .art{width:122px}.lamp-b{display:none}}
+  @keyframes flicker{0%,100%{opacity:.9;transform:scale(1)}
+    22%{opacity:1;transform:scale(1.03)}40%{opacity:.85;transform:scale(1)}
+    60%{opacity:1;transform:scale(1.05)}80%{opacity:.93;transform:scale(1.01)}}
+
+  /* drifting jellyfish */
+  .jelly{position:absolute;opacity:.5;will-change:transform}
+  .jelly .pulse{transform-origin:50% 22%;animation:jellypulse 3.6s ease-in-out infinite}
+  .jelly svg{display:block;width:100%;height:auto;
+    filter:drop-shadow(0 0 12px color-mix(in srgb,var(--jc) 65%,transparent))}
+  .jelly .bell{fill:var(--jc);fill-opacity:.5}
+  .jelly .tent{stroke:var(--jc);stroke-opacity:.55;fill:none;stroke-width:3;stroke-linecap:round}
+  .j1{top:19%;width:70px;--jc:#f0a94e;animation:swimA 48s linear infinite}
+  .j2{top:53%;width:54px;--jc:#e78a66;animation:swimB 62s linear infinite;animation-delay:-20s}
+  .j3{top:71%;width:88px;--jc:#d98fb0;animation:swimA 56s linear infinite;animation-delay:-32s}
+  .j2 .pulse{animation-duration:4.2s}
+  .j3 .pulse{animation-duration:3s}
+  @keyframes swimA{0%{transform:translate(-22vw,0)}25%{transform:translate(12vw,-3vh)}
+    50%{transform:translate(46vw,2vh)}75%{transform:translate(82vw,-3vh)}100%{transform:translate(122vw,0)}}
+  @keyframes swimB{0%{transform:translate(122vw,0)}25%{transform:translate(80vw,3vh)}
+    50%{transform:translate(44vw,-2vh)}75%{transform:translate(10vw,3vh)}100%{transform:translate(-22vw,0)}}
+  @keyframes jellypulse{0%,100%{transform:scaleY(1) scaleX(1)}50%{transform:scaleY(.88) scaleX(1.05)}}
+
+  /* night-switch fx: moon + zzz drifting off Totoro */
+  .nightfx{position:fixed;right:80px;bottom:96px;z-index:7;pointer-events:none}
+  @media (max-width:600px){.nightfx{right:60px;bottom:72px}}
+  .nightfx span{position:absolute;opacity:0}
+  .nightfx.play span{animation:floatUp 2.1s ease-out forwards}
+  @keyframes floatUp{0%{opacity:0;transform:translate(0,6px) scale(.6)}
+    18%{opacity:1}100%{opacity:0;transform:translate(26px,-64px) scale(1.1)}}
 
   /* glass surface */
   .glass{
@@ -332,23 +367,48 @@
 <div class="lamps" aria-hidden="true">
   <div class="lamp lamp-a">
     <span class="glow"></span>
-    <svg class="art" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 58a40 40 0 0 1 80 0z" fill="#e8a55e" fill-opacity=".9"/>
-      <path d="M20 58h80" stroke="#f6d9a6" stroke-width="2.4" stroke-linecap="round"/>
-      <rect x="56" y="58" width="8" height="66" rx="4" fill="#c98a4e"/>
-      <path d="M32 128q28-13 56 0l4 9H28z" fill="#c98a4e"/>
+    <svg class="art" viewBox="0 0 140 172" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 80C16 30 124 30 124 80C124 84 120 86 112 86H28C20 86 16 84 16 80Z" fill="#eba85c"/>
+      <path d="M40 46C58 36 92 36 104 48" stroke="#f7d6a2" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+      <ellipse cx="70" cy="86" rx="46" ry="5" fill="#ffe3ad"/>
+      <path d="M54 86H86L92 142Q70 152 48 142Z" fill="#cf8f4f"/>
+      <ellipse cx="70" cy="148" rx="34" ry="8" fill="#b97e45"/>
     </svg>
   </div>
   <div class="lamp lamp-b">
     <span class="glow"></span>
-    <svg class="art" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 54a36 36 0 0 1 72 0z" fill="#e79a6a" fill-opacity=".9"/>
-      <path d="M24 54h72" stroke="#f6d2ad" stroke-width="2.4" stroke-linecap="round"/>
-      <rect x="56" y="54" width="8" height="70" rx="4" fill="#c07f52"/>
-      <path d="M34 128q26-12 52 0l3 9H31z" fill="#c07f52"/>
+    <svg class="art" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="52" y="150" width="36" height="12" rx="6" fill="#b97e45"/>
+      <rect x="66" y="120" width="8" height="34" rx="4" fill="#cf8f4f"/>
+      <circle cx="70" cy="76" r="46" fill="none" stroke="#eba85c" stroke-width="15"/>
+      <circle cx="70" cy="76" r="46" fill="none" stroke="#ffe0a6" stroke-width="5" opacity=".85"/>
     </svg>
   </div>
 </div>
+<div class="tank" aria-hidden="true">
+  <div class="jelly j1"><div class="pulse">
+    <svg viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="bell" d="M8 56C8 20 92 20 92 56C92 66 82 70 68 70H32C18 70 8 66 8 56Z"/>
+      <path class="tent" d="M26 70c-3 26 3 40-2 60"/><path class="tent" d="M42 70c-2 30 2 44 0 62"/>
+      <path class="tent" d="M58 70c2 30-2 44 0 62"/><path class="tent" d="M74 70c3 26-3 40 2 60"/>
+    </svg>
+  </div></div>
+  <div class="jelly j2"><div class="pulse">
+    <svg viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="bell" d="M8 56C8 20 92 20 92 56C92 66 82 70 68 70H32C18 70 8 66 8 56Z"/>
+      <path class="tent" d="M26 70c-3 26 3 40-2 60"/><path class="tent" d="M42 70c-2 30 2 44 0 62"/>
+      <path class="tent" d="M58 70c2 30-2 44 0 62"/><path class="tent" d="M74 70c3 26-3 40 2 60"/>
+    </svg>
+  </div></div>
+  <div class="jelly j3"><div class="pulse">
+    <svg viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="bell" d="M8 56C8 20 92 20 92 56C92 66 82 70 68 70H32C18 70 8 66 8 56Z"/>
+      <path class="tent" d="M26 70c-3 26 3 40-2 60"/><path class="tent" d="M42 70c-2 30 2 44 0 62"/>
+      <path class="tent" d="M58 70c2 30-2 44 0 62"/><path class="tent" d="M74 70c3 26-3 40 2 60"/>
+    </svg>
+  </div></div>
+</div>
+<div class="nightfx" id="nightfx" aria-hidden="true"></div>
 
 <div class="app">
   <header class="app-header">
@@ -623,7 +683,18 @@ $("themeToggle").addEventListener("click",()=>{
   const next=effectiveTheme()==="dark"?"light":"dark";
   document.documentElement.setAttribute("data-theme",next);
   try{localStorage.setItem(THEME_KEY,next);}catch(e){}
+  if(next==="dark")playNightFx();
 });
+function playNightFx(){
+  const fx=$("nightfx");
+  fx.innerHTML=
+    '<span style="font-size:26px;left:0;bottom:0">🌙</span>'+
+    '<span style="font-size:14px;left:22px;bottom:12px;color:#f3e2c0;font-weight:700;animation-delay:.18s">z</span>'+
+    '<span style="font-size:18px;left:31px;bottom:24px;color:#f3e2c0;font-weight:700;animation-delay:.42s">z</span>'+
+    '<span style="font-size:23px;left:42px;bottom:38px;color:#f3e2c0;font-weight:700;animation-delay:.7s">z</span>';
+  fx.classList.remove("play");void fx.offsetWidth;fx.classList.add("play");
+  clearTimeout(fx._t);fx._t=setTimeout(()=>{fx.classList.remove("play");fx.innerHTML="";},2500);
+}
 
 render();
 </script>
