@@ -94,7 +94,12 @@
   }
 
   /* ---------- header ---------- */
-  .app-header{display:flex;align-items:center;gap:14px;padding:2px}
+  .app-header{display:flex;align-items:center;gap:14px;padding:2px;flex-wrap:wrap}
+  .head-titles{flex:1 1 200px;min-width:0}
+  .hr{display:flex;align-items:center;gap:11px;margin-left:auto}
+  .brand{width:46px;height:46px;flex:none;border-radius:50%;overflow:hidden;background:#fff;
+    border:1px solid var(--glass-border);box-shadow:var(--sh),var(--inset)}
+  .brand img{width:100%;height:100%;object-fit:cover;display:block}
   .logo{
     width:46px;height:46px;border-radius:var(--r);flex:none;font-size:23px;
     display:flex;align-items:center;justify-content:center;
@@ -270,12 +275,14 @@
 <div class="app">
   <header class="app-header">
     <div class="logo">🧳</div>
-    <div>
+    <div class="head-titles">
       <h1>Dorm Packer</h1>
       <p class="sub">Everything you need, nothing you'll forget.</p>
     </div>
-    <span class="spacer"></span>
-    <span class="save-pill" id="savePill"><span class="dot"></span>Saved</span>
+    <div class="hr">
+      <span class="save-pill" id="savePill"><span class="dot"></span>Saved</span>
+      <span class="brand" title="Ryan Moy"><img src="rm-logo.jpg" alt="Ryan Moy logo" width="500" height="500"></span>
+    </div>
   </header>
 
   <section class="glass progress">
